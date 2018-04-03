@@ -13,7 +13,7 @@ export default DrawerNavigator({
 }, {
     initialRouteName: 'MainListView',
     contentComponent: SideMenu,
-    drawerWidth: 250,
+    drawerWidth: 300,
     // drawerPosition:'left'
 })
 
