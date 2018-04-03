@@ -1,21 +1,19 @@
 import React, {} from 'react';
-import {DrawerNavigator} from 'react-navigation';
+import {DrawerNavigator,} from 'react-navigation';
 
-import MainList from './MainListScreen';
-import ForumDetail from "./InvitaDetailScreen";
+import StackNavigator from './Mainfest'
 
 import SideMenu from './SideMenuScreen'
 
 export default DrawerNavigator({
     MainListView: {
-        screen: MainList
+        screen: StackNavigator
     },
-    ForumDetailView: {
-        screen: ForumDetail
-    },
+
 }, {
     initialRouteName: 'MainListView',
     contentComponent: SideMenu,
     drawerWidth: 250,
     // drawerPosition:'left'
 })
+
