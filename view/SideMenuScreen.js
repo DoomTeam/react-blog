@@ -46,7 +46,7 @@ export default class SideMenu extends Component{
         if(item){
            this.navigateToScreen('MainListView',item.name)
         }else {
-            this.navigateToScreen('MainListView','帖子推荐')
+            this.navigateToScreen('TopicScreen','帖子推荐')
         }
     }
 

@@ -9,8 +9,7 @@ import IconView from "./iconScreen";
 export default StackNavigator({
         List: {screen: MainList,title:'列表'},
         Details: {screen: ForumDetail,title:'详情'},
-        IconScreen:{screen:IconView,title:'icon'}
-        // Comments: {screen: TopicCommentsScreen,title:'评论'},
+        IconScreen:{screen:IconView,title:'icon'},
     },
     {
         initialRouteName: 'List',
