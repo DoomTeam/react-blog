@@ -5,12 +5,12 @@ import {inject, observer} from "mobx-react/native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {StackNavigator} from 'react-navigation';
+import EmptyView from './EmptyComponent'
 
 //帖子列表页
 @inject('store')
 @observer
 export default class TopicListView extends Component{
-
     static navigationOptions = ({navigation, props}) => {
         const params = navigation.state.params || 'default';
         return {
@@ -30,6 +30,7 @@ export default class TopicListView extends Component{
             tid: null,
             waiting:false,
             topics:[],
+            fHeight:0,
         }
     }
 
@@ -61,8 +62,8 @@ export default class TopicListView extends Component{
     componentWillMount() {
         this.loadTopics();
     }
-
     render(){
+        let fHeight=0;
         return(
             <View style={styles.container}>
                 <Text>{this.state.name}</Text>
@@ -71,6 +72,19 @@ export default class TopicListView extends Component{
                     renderItem={this._renderItem}
                     keyExtractor={this._keyExtractor}//用于为给定的item生成一个不重复的key
                     style={{marginTop:15}}
+                    onLayout={e => {
+                        let height=e.nativeEvent.layout.height;
+                        alert(height)
+                        if(height>this.state.fHeight){
+                            this.setState({fHeight:height})
+                        }
+                    }}
+                    ListEmptyComponent={
+                        <EmptyView
+                            emptyData='暂无内容'
+                            height={this.state.fHeight}
+                        />
+                    }
                 />
             </View>)
     }
