@@ -30,17 +30,25 @@ export default class TopicListView extends Component{
             tid: null,
             waiting:false,
             topics:[],
-            fHeight:0,
         }
     }
 
     loadTopics() {
-        this.setState({loading: true});
+        if(!this.state.tid)this.setState({loading: true});
         this.props.store.fetchTopicList(this.props.store.selectedSubForum, this.state.tid)
             .then((results) => {
                 this.setState({loading: false});
                 this.setState({waiting: false});
-                this.setState({topics: this.state.topics.concat(results.result.data || [])});
+                let newArray=this.state.tid?this.state.topics.concat(results.result.data || []):results.result.data;
+                this.setState({topics:newArray});
+                // if(this.state.tid){
+                //     this.setState({topics:this.state.topics.concat(results.result.data||[])})
+                // }else {
+                //     this.setState({topics:results.result.data })
+                // }
+                // alert(newArray.length)
+                // this.setState({topics:this.state.tid?this.state.topics.concat(results.result.data || []):results.result.data})
+                // this.setState({topics: this.state.topics.concat(results.result.data || [])});
                 if (this.state.topics.length > 0) {
                     this.setState({tid: this.state.topics[this.state.topics.length - 1].tid});
                 }
@@ -59,11 +67,30 @@ export default class TopicListView extends Component{
             });
     }
 
+    _onRefresh=()=>{
+        this.setState({tid:null},()=>{
+            this.loadTopics()
+        })
+        this.setState({loading:true})
+    }
+
+    _onLoadMore=()=>{
+        this.loadTopics()
+    }
+
+    renderFooter=()=>{
+        if(this.state.waiting){
+            return(<Text>加载中</Text>)
+        }else {
+            return(<Text>...</Text>)
+        }
+    }
+
     componentWillMount() {
         this.loadTopics();
     }
+
     render(){
-        let fHeight=0;
         return(
             <View style={styles.container}>
                 <Text>{this.state.name}</Text>
@@ -72,19 +99,25 @@ export default class TopicListView extends Component{
                     renderItem={this._renderItem}
                     keyExtractor={this._keyExtractor}//用于为给定的item生成一个不重复的key
                     style={{marginTop:15}}
-                    onLayout={e => {
-                        let height=e.nativeEvent.layout.height;
-                        alert(height)
-                        if(height>this.state.fHeight){
-                            this.setState({fHeight:height})
-                        }
-                    }}
+                    //高度计算和android类似，取值在数据加载后，所以此高度，不能去做为初始的占位图使用
+                    // onLayout={e => {
+                    //     let height=e.nativeEvent.layout.height;
+                    //     alert(height)
+                    //     if(height>this.state.fHeight){
+                    //         this.setState({fHeight:height})
+                    //     }
+                    // }}
+                    refreshing={this.state.loading}
                     ListEmptyComponent={
                         <EmptyView
                             emptyData='暂无内容'
-                            height={this.state.fHeight}
+                            height={500}
                         />
                     }
+                    onRefresh={this._onRefresh}
+                    onEndReached={this._onLoadMore}
+                    onEndReachedThreshold={0.1}
+                    ListFooterComponent={this.renderFooter}
                 />
             </View>)
     }
