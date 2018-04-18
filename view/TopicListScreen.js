@@ -39,16 +39,13 @@ export default class TopicListView extends Component{
             .then((results) => {
                 this.setState({loading: false});
                 this.setState({waiting: false});
-                let newArray=this.state.tid?this.state.topics.concat(results.result.data || []):results.result.data;
-                this.setState({topics:newArray});
-                // if(this.state.tid){
-                //     this.setState({topics:this.state.topics.concat(results.result.data||[])})
-                // }else {
-                //     this.setState({topics:results.result.data })
-                // }
-                // alert(newArray.length)
-                // this.setState({topics:this.state.tid?this.state.topics.concat(results.result.data || []):results.result.data})
-                // this.setState({topics: this.state.topics.concat(results.result.data || [])});
+                if(!this.state.tid){
+                    this.state.topics.splice(0,this.state.topics.length - 1);
+                    this.setState({topics:results.result.data});
+                } else {
+                    //注意，concat方法是创建一个列表副本，然后将其赋值
+                    this.setState({topics:this.state.topics.concat(results.result.data || [])})
+                }
                 if (this.state.topics.length > 0) {
                     this.setState({tid: this.state.topics[this.state.topics.length - 1].tid});
                 }
@@ -75,12 +72,13 @@ export default class TopicListView extends Component{
     }
 
     _onLoadMore=()=>{
+        this.setState({waiting:true})
         this.loadTopics()
     }
 
     renderFooter=()=>{
         if(this.state.waiting){
-            return(<Text>加载中</Text>)
+            return(<Text style={{flex:1,height:20,justifyContent:'center'}}>加载中^^^</Text>)
         }else {
             return(<Text>...</Text>)
         }
@@ -122,11 +120,15 @@ export default class TopicListView extends Component{
             </View>)
     }
 
+    _pressItem(item){
+       alert("11"+item.title)
+    }
+
     _renderItem=({item})=>{
         return(
-            <View style={styles.listItem}>
+            <View style={styles.listItem} onPress={this._pressItem.bind(this,item)}>
                 <Text style={styles.titleStyle}>{item.title}</Text>
-                <View style={styles.bottomView}>
+                <View style={styles.bottomView} onPress={this._pressItem.bind(this,item)}>
                     <Text>{item.time}</Text>
                     <Text>评论{item.replies}个</Text>
                 </View>
@@ -134,7 +136,7 @@ export default class TopicListView extends Component{
         )
     }
 
-    _keyExtractor = (item) => item.id + '';
+    _keyExtractor = (item) => item.tid + '';
 
 }
 
