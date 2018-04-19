@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import {FlatList,Text,View, StyleSheet} from 'react-native'
+import {FlatList,Text,View, StyleSheet,TouchableOpacity} from 'react-native'
 
 import {inject, observer} from "mobx-react/native";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -64,14 +64,14 @@ export default class TopicListView extends Component{
             });
     }
 
-    _onRefresh=()=>{
+    _onRefresh(){
         this.setState({tid:null},()=>{
             this.loadTopics()
         })
         this.setState({loading:true})
     }
 
-    _onLoadMore=()=>{
+    _onLoadMore(){
         this.setState({waiting:true})
         this.loadTopics()
     }
@@ -91,20 +91,12 @@ export default class TopicListView extends Component{
     render(){
         return(
             <View style={styles.container}>
-                <Text>{this.state.name}</Text>
                 <FlatList
                     data={this.state.topics}
                     renderItem={this._renderItem}
                     keyExtractor={this._keyExtractor}//用于为给定的item生成一个不重复的key
                     style={{marginTop:15}}
-                    //高度计算和android类似，取值在数据加载后，所以此高度，不能去做为初始的占位图使用
-                    // onLayout={e => {
-                    //     let height=e.nativeEvent.layout.height;
-                    //     alert(height)
-                    //     if(height>this.state.fHeight){
-                    //         this.setState({fHeight:height})
-                    //     }
-                    // }}
+
                     refreshing={this.state.loading}
                     ListEmptyComponent={
                         <EmptyView
@@ -112,27 +104,28 @@ export default class TopicListView extends Component{
                             height={500}
                         />
                     }
-                    onRefresh={this._onRefresh}
-                    onEndReached={this._onLoadMore}
+                    onRefresh={()=>this._onRefresh()}
+                    onEndReached={()=>this._onLoadMore()}
                     onEndReachedThreshold={0.1}
                     ListFooterComponent={this.renderFooter}
                 />
             </View>)
     }
 
-    _pressItem(item){
-       alert("11"+item.title)
+    _pressItem(topic){
+        this.props.store.selectTopic(topic);
+        this.props.navigation.navigate('Details');
     }
 
     _renderItem=({item})=>{
         return(
-            <View style={styles.listItem} onPress={this._pressItem.bind(this,item)}>
+            <TouchableOpacity style={styles.listItem} onPress={this._pressItem.bind(this,item)}>
                 <Text style={styles.titleStyle}>{item.title}</Text>
-                <View style={styles.bottomView} onPress={this._pressItem.bind(this,item)}>
+                <View style={styles.bottomView}>
                     <Text>{item.time}</Text>
                     <Text>评论{item.replies}个</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 

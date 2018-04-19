@@ -112,6 +112,18 @@ class BlogStore{
     selectTopic(topic) {
         this.selectedTopic = topic;
     }
+
+
+    //获取某个帖子的详情内容，页数实际没有用途，默认1
+    @action
+    async fetchTopicDetails(topic, page) {
+        var url = this.generateTopicUrl(topic, page);
+
+        const response = await fetch(url);
+        const json = await response.json();
+
+        return json;
+    }
 }
 
 const store = new BlogStore();
