@@ -4,15 +4,17 @@ import {StackNavigator} from 'react-navigation';
 import MainList from "./MainListScreen";
 import ForumDetail from "./InvitaDetailScreen";
 import IconView from "./iconScreen";
+import TopicListView from "./TopicListScreen";
 
 
 export default StackNavigator({
         List: {screen: MainList,title:'列表'},
         Details: {screen: ForumDetail,title:'详情'},
         IconScreen:{screen:IconView,title:'icon'},
+        FormList:{screen:TopicListView}
     },
     {
-        initialRouteName: 'List',
+        initialRouteName: 'FormList',
         /* The header config from HomeScreen is now here */
         navigationOptions: {
             headerStyle: {

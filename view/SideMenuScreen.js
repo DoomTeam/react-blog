@@ -11,8 +11,8 @@ import {NavigationActions} from 'react-navigation';
 export default class SideMenu extends Component {
     navigateToScreen(route, forum) {
         const navigateAction = NavigationActions.navigate({
-            routeName: route,
-            action: NavigationActions.navigate({routeName: 'List', params: {title: forum}}),
+            routeName: 'MainListView',
+            action: NavigationActions.navigate({routeName: route, params: {title: forum}}),
         });
         this.props.navigation.dispatch(navigateAction);
     }
@@ -44,9 +44,9 @@ export default class SideMenu extends Component {
 
     _pressItem(item) {
         if (item) {
-            this.navigateToScreen('MainListView', item.name)
+            this.navigateToScreen('List', item.name)
         } else {
-            this.navigateToScreen('TopicScreen', '帖子推荐')
+            this.navigateToScreen('FormList', '帖子推荐')
         }
     }
 

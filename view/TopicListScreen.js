@@ -89,6 +89,7 @@ export default class TopicListView extends Component{
     }
 
     componentWillMount() {
+        alert('open list why data is empty')
         this.loadTopics();
     }
 
@@ -161,24 +162,3 @@ var styles=StyleSheet.create({
         flexDirection:'row'
     }
 })
-
-const ForumDetailStack = StackNavigator({
-        List: { screen: TopicListView },
-    },
-    {
-        initialRouteName: 'List',
-        /* The header config from HomeScreen is now here */
-        navigationOptions: {
-            headerStyle: {
-                backgroundColor: '#32CD32',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-                fontWeight: 'bold',
-            },
-
-        },
-    }
-);
-
-module.exports = ForumDetailStack;
