@@ -13,35 +13,35 @@ const forums_url = base_url + 'forums/getForums?sign=ccfedf219f54485b74781da19bb
 const recommend_url = base_url + 'recommend/getThreadsList?';
 const topics_url = base_url + 'forums/getForumsInfoList?';
 const search_topics_url = 'http://games.mobileapi.hupu.com/1/7.0.8/search/list?';
-const topic_url = base_url + 'threads/getThreadsSchemaInfo?';
 const topic_comments_url = base_url + 'threads/getsThreadPostList?';
+const topic_url = base_url + 'threads/getThreadsSchemaInfo?';
 const referer_url = 'http://bbs.mobileapi.hupu.com/1/7.0.8/threads/getThreadDetailInfoH5';
 
-class BlogStore{
-    @observable forums=[];
+class BlogStore {
+    @observable forums = [];
     @observable selectedTopic;
     @observable selectedForum;
     @observable selectedSubForum;
 
-    constructor(){
+    constructor() {
         AsyncStorage.getItem('@forums')
-            .then((result)=>{
-                this.forums=JSON.parse(result);
+            .then((result) => {
+                this.forums = JSON.parse(result);
             })
     }
 
-    _putTopicList(topicList){
-        AsyncStorage.setItem('@forums',JSON.stringify(topicList));
+    _putTopicList(topicList) {
+        AsyncStorage.setItem('@forums', JSON.stringify(topicList));
     }
 
     //获取全部论坛信息
     @action
-    async fetchForums(){
-        const response=await fetch(forums_url)
-        if(response){
-            const json= await response.json();
-            if(json.data){
-                this.forums=json.data;
+    async fetchForums() {
+        const response = await fetch(forums_url)
+        if (response) {
+            const json = await response.json();
+            if (json.data) {
+                this.forums = json.data;
                 this._putTopicList(json.data);
             }
         }

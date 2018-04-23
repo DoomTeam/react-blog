@@ -72,12 +72,16 @@ export default class TopicListView extends Component{
     }
 
     _onLoadMore(){
-        this.setState({waiting:true})
-        this.loadTopics()
+        //这是bug吗？重复调用加载更多
+        if(this.state.topics.length>0&&!this.state.waiting){
+            this.setState({waiting:true})
+            this.loadTopics()
+        }
+
     }
 
     renderFooter=()=>{
-        if(this.state.waiting){
+        if(this.state.waiting&&this.state.tid){
             return(<Text style={{flex:1,height:20,justifyContent:'center'}}>加载中^^^</Text>)
         }else {
             return(<Text>...</Text>)
@@ -129,7 +133,7 @@ export default class TopicListView extends Component{
         )
     }
 
-    _keyExtractor = (item) => item.tid + '';
+    _keyExtractor = (item, index) => index + '';
 
 }
 
