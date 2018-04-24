@@ -104,8 +104,8 @@ class BlogStore {
     }
 
     //设置当前子论坛
-    selectSubForum(subforum) {
-        this.selectedSubForum = subforum;
+    selectSubForum(subgroup) {
+        this.selectedSubForum = subgroup;
     }
 
     //设置当前主题

@@ -43,7 +43,10 @@ export default class SideMenu extends Component {
     _keyExtractor = (item) => item.fid + '';
 
     _pressItem(item) {
+        this.props.store.selectForum(null);
+        this.props.store.selectSubForum(null);
         if (item) {
+            this.props.store.selectForum(item);
             this.navigateToScreen('List', item.name)
         } else {
             this.navigateToScreen('FormList', '帖子推荐')
