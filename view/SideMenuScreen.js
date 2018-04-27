@@ -20,7 +20,7 @@ export default class SideMenu extends Component {
     constructor(props) {
         super(props);
         state:{
-            listData:null;
+            listData:[{ name:'帖子推荐'},];
             isLoaded:false;
         }
     }
@@ -30,6 +30,7 @@ export default class SideMenu extends Component {
         this.props.store.fetchForums()
             .then((result) => {
                 this.setState({isLoaded: false})
+                result.unshift({name:'帖子推荐',fid:'-1'})
                 this.setState({listData: result})
             })
     }
@@ -45,7 +46,7 @@ export default class SideMenu extends Component {
     _pressItem(item) {
         this.props.store.selectForum(null);
         this.props.store.selectSubForum(null);
-        if (item) {
+        if (item.name!='帖子推荐') {
             this.props.store.selectForum(item);
             this.navigateToScreen('List', item.name)
         } else {
@@ -58,7 +59,6 @@ export default class SideMenu extends Component {
             <View style={{flex: 1,}}>
                 <Image source={require('../img/bg_banner_dialog.jpg')} resizeMode={'cover'}
                        style={{height: 200}}></Image>
-                <Text style={styles.listItem} onPress={this._pressItem.bind(this, null)}>帖子推荐</Text>
                 <FlatList style={{paddingLeft: 15, paddingRight: 15}}
                           data={this.state.listData}
                           keyExtractor={this._keyExtractor}//用于为给定的item生成一个不重复的key
@@ -79,6 +79,6 @@ var styles = StyleSheet.create({
     listItem: {
         height: 40,
         textAlignVertical: 'center',
-        fontSize: 15
+        fontSize: 15,
     }
 })
