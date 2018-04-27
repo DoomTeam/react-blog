@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 
 import {inject, observer} from 'mobx-react/native'
 
-//帖子列表页
+//论坛分类列表页
 @inject('store')
 @observer
 export default class MainList extends Component {
@@ -40,20 +40,51 @@ export default class MainList extends Component {
         }
     }
 
+    _onClick(item){
+        this.props.store.selectSubForum(item);
+        this.props.navigation.navigate('FormList')
+    }
+
     _renderItem=({item})=>{
         return(
-            <TouchableOpacity style={styles.item} onPress={()=>{alert('点击')}}>
-                <Image source={{uri:item.backImg}}style={{width:85,height:85,marginRight:15}}></Image>
+            <TouchableOpacity style={styles.item} onPress={this._onClick.bind(this,item)}>
+                <Image source={{uri:item.logo}}style={{width:85,height:85,marginRight:15}}></Image>
                 <View style={{justifyContent:'space-between',height:85}}>
                     <Text style={{ fontSize: 15,color:'#333'}}>{item.name}</Text>
-                    <Text style={{ fontSize: 13,color:'#aaa',}}>{item.description}</Text>
+                    <Text style={{ fontSize: 13,color:'#aaa',}}>{item.phone}</Text>
                 </View>
             </TouchableOpacity>
         )
     }
 
+    checkAdult(data) {
+        return data!=null;
+    }
+
     render() {
         const {forum} = this.state
+        if(forum.sub){
+            let length=forum.sub.length;
+            for(let a in forum.sub) {
+                a.data.filter(this.checkAdult)
+            }
+        }
+        const sections = [];
+
+        for (let i=0;i<10;i++) {
+            let datas = [];
+            for (let j = 0; j < 10; j++) {
+                datas.push(
+                    {
+                        name: '用户' + i + j,
+                        phone: '01234567890',
+
+                    }
+                );
+            }
+            sections.push({key:i,data:datas,name:i});
+        }
+
         return (
             <View style={{flex: 1, backgroundColor: '#f5f5f5', padding: 15, justifyContent: 'center',}}>
                 <SectionList
@@ -61,7 +92,7 @@ export default class MainList extends Component {
                     renderItem={this._renderItem}
                     renderSectionHeader={({section}) => <Text
                         style={styles.sectionHeader}>{section.name}</Text>}
-                    keyExtractor={(item, index) => index}
+                    keyExtractor={(item,index)=>("index"+index+item)}
                 />
 
             </View>

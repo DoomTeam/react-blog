@@ -1,10 +1,9 @@
 import React,{Component} from 'react'
-import {FlatList,Text,View, StyleSheet,TouchableOpacity} from 'react-native'
+import {FlatList,Text,View, StyleSheet,TouchableOpacity,ImageBackground} from 'react-native'
 
 import {inject, observer} from "mobx-react/native";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-import {StackNavigator} from 'react-navigation';
 import EmptyView from './EmptyComponent'
 
 //帖子列表页
@@ -13,12 +12,16 @@ import EmptyView from './EmptyComponent'
 export default class TopicListView extends Component{
     static navigationOptions = ({navigation, props}) => {
         const params = navigation.state.params || 'default';
+        const isTopic=(!params.title || params.title=='帖子推荐')
         return {
             title: params.title ? params.title : '帖子推荐',
             headerLeft: (<Icon transparent
-                               onPress={() => {navigation.navigate('DrawerToggle');}}
-                               name={"navicon"}
-                               style={{color: '#fff',paddingLeft:15}} size={20}>
+                               onPress={() => {
+                                   if(isTopic)navigation.navigate('DrawerToggle');
+                                   else navigation.goBack();
+                               }}
+                               name={isTopic?"md-menu":'ios-arrow-back'}
+                               style={{color: '#fff',paddingLeft:15}} size={30}>
             </Icon>),
         }
     };
@@ -88,8 +91,19 @@ export default class TopicListView extends Component{
         }
     }
 
+    renderHeader = () => {
+        const selectedSubForum=this.props.store.selectedSubForum;
+        if (selectedSubForum) {
+            return (<ImageBackground source={{uri:(selectedSubForum.backImg?selectedSubForum.backImg:"http://i1.hoopchina.com.cn/blogfile/201512/29/BbsImg145138210052815_990*686.jpg")}} style={styles.listHeaderImage}>
+                <Text style={{fontSize:16,color:'white'}}>{selectedSubForum.name}</Text>
+                <Text style={{fontSize:13,color:'white',marginTop:8}}>{selectedSubForum.description}</Text>
+            </ImageBackground>);
+        }else {
+            return(null)
+        }
+    }
+
     componentWillMount() {
-        alert('open list why data is empty')
         this.loadTopics();
     }
 
@@ -101,6 +115,7 @@ export default class TopicListView extends Component{
                     renderItem={this._renderItem}
                     keyExtractor={this._keyExtractor}//用于为给定的item生成一个不重复的key
                     style={{marginTop:15}}
+                    ListHeaderComponent={this.renderHeader}
 
                     refreshing={this.state.loading}
                     ListEmptyComponent={
@@ -160,5 +175,12 @@ var styles=StyleSheet.create({
     bottomView:{
         justifyContent:'space-between',
         flexDirection:'row'
+    },
+    listHeaderImage:{
+        height:200,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom:10,
     }
 })

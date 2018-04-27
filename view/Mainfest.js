@@ -8,10 +8,11 @@ import TopicListView from "./TopicListScreen";
 
 
 export default StackNavigator({
-        List: {screen: MainList,title:'列表'},
-        Details: {screen: ForumDetail,title:'详情'},
+        List: {screen: MainList,title:'列表'},//论坛主列表页
+        Details: {screen: ForumDetail,title:'详情'},//贴吧详情页
         IconScreen:{screen:IconView,title:'icon'},
-        FormList:{screen:TopicListView}
+        FormList:{screen:TopicListView}//贴吧列表页
+
     },
     {
         initialRouteName: 'FormList',
