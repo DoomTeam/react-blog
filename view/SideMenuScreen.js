@@ -30,7 +30,7 @@ export default class SideMenu extends Component {
         this.props.store.fetchForums()
             .then((result) => {
                 this.setState({isLoaded: false})
-                result.unshift({name:'帖子推荐',fid:'-1'})
+                result.unshift({name:'帖子推荐',fid:'-1'})//这个返回的结果是最终的数组长度，原数组会在头部插入一个数据
                 this.setState({listData: result})
             })
     }

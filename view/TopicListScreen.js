@@ -2,9 +2,11 @@ import React,{Component} from 'react'
 import {FlatList,Text,View, StyleSheet,TouchableOpacity,ImageBackground} from 'react-native'
 
 import {inject, observer} from "mobx-react/native";
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import EmptyView from './EmptyComponent'
+import {NativeModules,DeviceEventEmitter} from 'react-native';
 
 //帖子列表页
 @inject('store')
@@ -91,11 +93,24 @@ export default class TopicListView extends Component{
         }
     }
 
+    linkAndroid() {
+        NativeModules.ExampleInterface.logValue("value");
+        DeviceEventEmitter.addListener('AndroidToRnMessage',this.handleMessage.bind(this))
+        alert('调用android模块')
+    }
+
+    handleMessage(message){
+        alert(message)
+    }
+
+
+
+
     renderHeader = () => {
         const selectedSubForum=this.props.store.selectedSubForum;
         if (selectedSubForum) {
             return (<ImageBackground source={{uri:(selectedSubForum.backImg?selectedSubForum.backImg:"http://i1.hoopchina.com.cn/blogfile/201512/29/BbsImg145138210052815_990*686.jpg")}} style={styles.listHeaderImage}>
-                <Text style={{fontSize:16,color:'white'}}>{selectedSubForum.name}</Text>
+                <Text style={{fontSize:16,color:'white'}} onPress={this.linkAndroid.bind(this)}>{selectedSubForum.name}</Text>
                 <Text style={{fontSize:13,color:'white',marginTop:8}}>{selectedSubForum.description}</Text>
             </ImageBackground>);
         }else {

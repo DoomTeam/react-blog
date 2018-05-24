@@ -69,6 +69,7 @@ export default  class ForumDetail extends Component {
                          allowsInlineMediaPlayback={true}
                          mixedContentMode={'always'}
                 />
+                <Text style={styles.title}>1、按钮（跳转到图片库）</Text>
                 {/*<Text style={styles.title}>1、按钮（跳转到图片库）</Text>*/}
                 {/*{items.map((item, index) => {*/}
                     {/*return this._buttonIcon(item, index);*/}

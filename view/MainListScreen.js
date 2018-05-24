@@ -30,7 +30,11 @@ export default class MainList extends Component {
     }
 
     componentWillMount() {
-        this.setState({forum: this.props.store.selectedForum});
+        // this.setState({forum: (this.props.store.selectedForum).map(function (v,k) {
+        //         for(var a in v.data){
+        //
+        //         }
+        //     })});
         this.props.navigation.setParams({title: (this.props.store.selectedForum.name || '')})
     }
 
@@ -57,38 +61,35 @@ export default class MainList extends Component {
         )
     }
 
-    checkAdult(data) {
-        return data!=null;
-    }
-
     render() {
-        const {forum} = this.state
-        if(forum.sub){
-            let length=forum.sub.length;
-            for(let a in forum.sub) {
-                a.data.filter(this.checkAdult)
-            }
-        }
-        const sections = [];
-
-        for (let i=0;i<10;i++) {
-            let datas = [];
-            for (let j = 0; j < 10; j++) {
-                datas.push(
-                    {
-                        name: '用户' + i + j,
-                        phone: '01234567890',
-
-                    }
-                );
-            }
-            sections.push({key:i,data:datas,name:i});
-        }
+        const forums = this.state.forum.sub
+        // if(forum.sub){
+        //     let length=forum.sub.length;
+        //     alert(length)
+        //     for(let a in forum.sub) {
+        //         a.data.filter(this.checkAdult)
+        //     }
+        // }
+        // const sections = [];
+        //
+        // for (let i=0;i<10;i++) {
+        //     let datas = [];
+        //     for (let j = 0; j < 10; j++) {
+        //         datas.push(
+        //             {
+        //                 name: '用户' + i + j,
+        //                 phone: '01234567890',
+        //
+        //             }
+        //         );
+        //     }
+        //     sections.push({key:i,data:datas,name:i});
+        // }
 
         return (
             <View style={{flex: 1, backgroundColor: '#f5f5f5', padding: 15, justifyContent: 'center',}}>
                 <SectionList
-                    sections={forum.sub}
+                    sections={forums}
                     renderItem={this._renderItem}
                     renderSectionHeader={({section}) => <Text
                         style={styles.sectionHeader}>{section.name}</Text>}
